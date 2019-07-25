@@ -4,7 +4,7 @@ ifeq ($(UNAME_S), Linux)
     COMPILER = g++
     FLAGS = -std=c++1y -pedantic -Wall
     GL_FLAGS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
-    FILES = main.cpp
+    FILES = firstWindow.cpp
     APP_NAME = firstWindow
 endif
 
