@@ -5,7 +5,7 @@ ifeq ($(UNAME_S), Linux)
     FLAGS = -std=c++1y -pedantic -Wall
     GL_FLAGS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
     FILES = firstWindow.cpp
-    APP_NAME = firstWindow
+    APP_NAME = firstWindowBin
 endif
 
 
