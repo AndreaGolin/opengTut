@@ -4,6 +4,7 @@
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow *window);
 
 int main()
 {
@@ -61,10 +62,36 @@ int main()
 	 */
 	while(!glfwWindowShouldClose(window))
 	{
+		/**
+		 * @brief      Trigger the event polls
+		 *
+		 * @param[in]  GLFWwindow window
+		 */
+		processInput(window);
+
+		// rendering commands here
+		// glclear all previous iteration drawing from screen (in this case, the color buffer)
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		/**
+		 * @brief      Dump the color buffer inside the window
+		 *
+		 * @param[in]  GLFWwindow window
+		 */
 	    glfwSwapBuffers(window);
+
+	    /**
+	     * @brief      polls for event (like keyboard or mouse call)
+	     * 				and change window state, calls corresponding methods via callback
+	     */
 	    glfwPollEvents();    
 	}
-	  
+
+	/**
+	 * @brief      Clean up glfw and its resources
+	 */
+	glfwTerminate();
     return 0;
 }
 
@@ -83,3 +110,31 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	 */
 	glViewport(0, 0, width, height);
 } 
+
+/**
+ * @brief      Process user input
+ *
+ * @param      window  The window
+ */
+void processInput(GLFWwindow *window)
+{
+	/**
+	 * glfwGetKey is the function used to manage key actions
+	 */
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+
+    	std::cout << "Esc key pressed, exiting\n";
+
+    	// Set the rendering loop to close at next generation
+        glfwSetWindowShouldClose(window, true);
+    }
+    // switch(glfwGetKey(window, GLFW_KEY_ESCAPE)){
+    // 	case GLFW_PRESS:
+    // 		std::cout << "Esc key pressed, exiting\n";
+    // 		glfwSetWindowShouldClose(window, true);
+    // 		break;
+
+    // }
+
+	    
+}
