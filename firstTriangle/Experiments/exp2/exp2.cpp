@@ -240,9 +240,6 @@ int main(int argc, char const *argv[])
     glfwTerminate();
     return 0;
 
-
-	std::cout << "EXP2! (This time is the right time!).\n";
-	return 0;
 }
 
 
