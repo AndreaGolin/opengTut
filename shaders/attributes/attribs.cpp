@@ -184,7 +184,7 @@ int main(int argc, char const *argv[])
     glBindVertexArray(0);
 
 
-    // Bind second VAO for attrib
+    // Bind second VAO (VAOA) for attrib
     glBindVertexArray(VAOA);
     glBindBuffer(GL_ARRAY_BUFFER, VBOA);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticesAttr), verticesAttr, GL_STATIC_DRAW);
@@ -220,14 +220,12 @@ int main(int argc, char const *argv[])
 		glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
 
-
+        // Bind VAOA for colo attrib
         glUseProgram(shaderProgramAttr);
         glBindVertexArray(VAOA);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
 
-
-        
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
