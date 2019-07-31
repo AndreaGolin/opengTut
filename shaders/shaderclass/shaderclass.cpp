@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
     }
 
     // Load the shader
-    Shader ourShader("/home/andrea/opengl/shaders/shaderclass/shaders_src/shader.vs", "/home/andrea/opengl/shaders/shaderclass/shaders_src/shader.fs");
+    Shader ourShader("/home/andrea/opengl/shaders/shaders_src/shader.vs", "/home/andrea/opengl/shaders/shaders_src/shader.fs");
 
     // Deine Vertices
     float vertices[] = {
