@@ -132,6 +132,14 @@ int main(int argc, char const *argv[])
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Get the green value from sin of time function
+        float timeValue = glfwGetTime();
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        //use shader program
+        
+        ourShader.setFloat("ourVal0", greenValue);
+        ourShader.setFloat("ourVal1", greenValue / 2);
+
         // This call will automatically bind the texture to the uniform texture of the frag shader
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
