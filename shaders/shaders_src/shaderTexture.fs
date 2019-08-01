@@ -16,6 +16,6 @@ void main(){
 	 * built-in texture function that takes as its first argument a texture sampler 
 	 * and as its second argument the corresponding texture coordinate.
 	 */
-	// FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0); 
-	FragColor = texture(ourTexture, TexCoord) * vec4(ourVal0,ourVal1,0.1f, 1.0); 
+	FragColor = texture(ourTexture, TexCoord); 
+	// FragColor = texture(ourTexture, TexCoord) * vec4(ourVal0,ourVal1,0.1f, 1.0); 
 }
