@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
     stbi_image_free(data);
 
     // Load the shader
-    Shader ourShader("/home/andrea/opengl/shaders/shaders_src/shaderTexture.vs", "/home/andrea/opengl/shaders/shaders_src/shaderTexture.fs");
+    Shader coordsShader("/home/andrea/opengl/shaders/shaders_src/shaderCoords.vs", "/home/andrea/opengl/shaders/shaders_src/shaderTexture.fs");
 
     // define vertices, with added texture coords!
     float vertices[] = {
@@ -115,7 +115,36 @@ int main(int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    ourShader.use();
+    coordsShader.use();
+    unsigned int modelLoc = glGetUniformLocation(coordsShader.ID, "ModelMat");
+    unsigned int viewLoc = glGetUniformLocation(coordsShader.ID, "ViewMat");
+    unsigned int projLoc = glGetUniformLocation(coordsShader.ID, "ProjectionMat");
+
+    /**
+     * Create a Model matrix
+     * Multiplyng the model matrix with the vertex transform the obj coords to world coords
+    */
+    glm::mat4 modelMat = glm::mat4(1.0f);
+    modelMat = glm::rotate(modelMat, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+    /**
+     * View Matrix
+     * To change the world view, camera-like
+     */
+    glm::mat4 viewMat = glm::mat4(1.0f);
+	// note that we're translating the scene in the reverse direction of where we want to move
+	// we move the scene to the negative z axis, which lies ahead of us to give the impression 
+	// of zooming out
+	viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+
+	/**
+	 * Projection matrix
+	 * To give our scene ortho/perspective view
+	 */
+	glm::mat4 projectionMat;
+	projectionMat = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+
 	
 	// The Loop
     while (!glfwWindowShouldClose(window))
@@ -131,6 +160,9 @@ int main(int argc, char const *argv[])
         glClear(GL_COLOR_BUFFER_BIT);
 
 		glBindVertexArray(VAO);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projectionMat));
         // This call will automatically bind the texture to the uniform texture of the frag shader
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
