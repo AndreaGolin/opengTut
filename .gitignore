@@ -7,3 +7,4 @@ shaders/attributes/attribsBin
 shaders/shaderclass/shaderclassBin
 textureExp/texturesBin
 transform/transBin
+coords/coordsBin
