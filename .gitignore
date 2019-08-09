@@ -8,3 +8,4 @@ shaders/shaderclass/shaderclassBin
 textureExp/texturesBin
 transform/transBin
 coords/coordsBin
+camera/cameraBin

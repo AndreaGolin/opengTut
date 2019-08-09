@@ -59,6 +59,11 @@ int main(int argc, char const *argv[])
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     /**
+     * Enable depth testing
+     */
+    glEnable(GL_DEPTH_TEST);
+
+    /**
      * Load image and generate texture
      */
     // Load an image with stb_image
@@ -84,22 +89,15 @@ int main(int argc, char const *argv[])
         -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
         -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
     };
-    unsigned int indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
-    };
 
     // Define and bind VAO e VBO
-    unsigned int VBO, VAO, EBO;
+    unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // Point to position, as usual
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -117,8 +115,9 @@ int main(int argc, char const *argv[])
 
     coordsShader.use();
     unsigned int modelLoc = glGetUniformLocation(coordsShader.ID, "ModelMat");
-    unsigned int viewLoc = glGetUniformLocation(coordsShader.ID, "ViewMat");
-    unsigned int projLoc = glGetUniformLocation(coordsShader.ID, "ProjectionMat");
+    unsigned int viewLoc  = glGetUniformLocation(coordsShader.ID, "ViewMat");
+    unsigned int projLoc  = glGetUniformLocation(coordsShader.ID, "ProjectionMat");
+    unsigned int funLoc   = glGetUniformLocation(coordsShader.ID, "FunMat");
 
     /**
      * Create a Model matrix
@@ -157,15 +156,22 @@ int main(int argc, char const *argv[])
         // ------
         // clear
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Funny rotation
+        glm::mat4 funMat = glm::mat4(1.0f);
+        funMat = glm::rotate(funMat, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+       
 		glBindVertexArray(VAO);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projectionMat));
+		glUniformMatrix4fv(funLoc, 1, GL_FALSE, glm::value_ptr(funMat));
         // This call will automatically bind the texture to the uniform texture of the frag shader
         glBindTexture(GL_TEXTURE_2D, texture);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -175,7 +181,6 @@ int main(int argc, char const *argv[])
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
 
 	glfwTerminate();
 	return 0;

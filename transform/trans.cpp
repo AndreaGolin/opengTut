@@ -167,14 +167,18 @@ int main(int argc, char const *argv[])
         glm::mat4 trans = glm::mat4(1.0f);
 		// trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
 
+        float timeValue = glfwGetTime();
+        float sinTine = (sin(timeValue) / 2.0f) + 0.5f;
+        // std::cout << sinTine << "\n";
+
 		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+		trans = glm::scale(trans, glm::vec3(sinTine, sinTine, sinTine));
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         // This call will automatically bind the texture to the uniform texture of the frag shader
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
